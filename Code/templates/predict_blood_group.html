@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Blood Group Prediction</title>
+
+  <!-- Favicons -->
+  <link href="/static/img/favicon.png" rel="icon">
+  <link href="/static/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/static/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/static/css/main.css" rel="stylesheet">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+    :root {
+      --primary-color: #007bff;
+      --primary-hover: #0056b3;
+      --text-color: #333;
+      --text-light: #666;
+      --border-color: #ccc;
+      --bg-light: #f8f9fa;
+      --error-color: #dc3545;
+      --success-color: #28a745;
+      --header-height: 72px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background-color: #f5f7fa;
+      color: var(--text-color);
+      min-height: 100vh;
+    }
+
+    .main {
+      min-height: calc(100vh - var(--header-height));
+      padding: calc(var(--header-height) + 20px) 20px 20px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .prediction-form {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease-out;
+      margin: 0 auto;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .form-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .form-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background-color: var(--primary-color);
+      border-radius: 2px;
+    }
+
+    .form-subtitle {
+      color: var(--text-light);
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-color);
+      font-size: 15px;
+    }
+
+    .required-field::after {
+      content: " *";
+      color: var(--error-color);
+      font-weight: bold;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      font-size: 16px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px 15px 14px 45px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background-color: var(--bg-light);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+      background-color: white;
+      outline: none;
+    }
+
+    .form-control::placeholder {
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    /* Custom select styling */
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      padding-right: 40px;
+    }
+
+    /* File input styling */
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .file-input-label {
+      display: block;
+      padding: 14px 15px;
+      background-color: var(--bg-light);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      color: var(--text-light);
+    }
+
+    .file-input-label:hover {
+      background-color: #e9ecef;
+    }
+
+    .file-input-label i {
+      margin-right: 8px;
+    }
+
+    .image-preview {
+      max-width: 300px;
+      margin: 20px auto;
+      display: none;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .image-preview:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .image-preview img {
+      width: 100%;
+      display: block;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn:hover {
+      background-color: var(--primary-hover);
+      transform: scale(1.02);
+      box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    .submit-btn:active {
+      transform: scale(1);
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 13px;
+      margin-top: 8px;
+      display: none;
+      animation: shake 0.5s;
+      font-weight: 500;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* Loading animation */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .prediction-form {
+        padding: 30px;
+        margin: 20px;
+      }
+
+      .form-title {
+        font-size: 24px;
+      }
+
+      .form-subtitle {
+        font-size: 14px;
+      }
+
+      .form-control {
+        padding: 12px 15px 12px 45px;
+        font-size: 14px;
+      }
+
+      .submit-btn {
+        padding: 14px;
+        font-size: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .prediction-form {
+        padding: 20px;
+      }
+
+      .form-title {
+        font-size: 22px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body class="index-page">
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="/home" class="logo d-flex align-items-center me-auto">
+        <img src="/static/img/logo.png" alt="">
+        <h1 class="sitename">Bloodgroup Prediction</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/team">Team</a></li>
+          {% if 'user_id' in session %}
+          <li><a href="/predict_blood_group" class="active">Predict</a></li>
+          <li><a href="/Accurancy">Accurancy</a></li>
+          <li><a href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+          <li><a href="/logout" class="logout-link">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a></li>
+          {% else %}
+          <li><a href="/login">Login</a></li>
+          <li><a href="/signup">Sign Up</a></li>
+          {% endif %}
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="prediction-form">
+      <div class="form-header">
+        <h2 class="form-title">Blood Group Prediction</h2>
+        <p class="form-subtitle">Please fill in your details to predict your blood group</p>
+      </div>
+
+      <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" id="predictionForm">
+        <div class="form-group">
+          <label for="name" class="form-label required-field">Full Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" required>
+          </div>
+          <div class="error-message" id="nameError">Please enter your full name</div>
+        </div>
+
+        <div class="form-group">
+          <label for="age" class="form-label required-field">Age</label>
+          <div class="input-wrapper">
+            <i class="fas fa-calendar-alt input-icon"></i>
+            <input type="number" class="form-control" id="age" name="age" min="1" max="120" placeholder="Enter your age" required>
+          </div>
+          <div class="error-message" id="ageError">Please enter a valid age</div>
+        </div>
+
+        <div class="form-group">
+          <label for="gender" class="form-label required-field">Gender</label>
+          <div class="input-wrapper">
+            <i class="fas fa-venus-mars input-icon"></i>
+            <select class="form-control" id="gender" name="gender" required>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="error-message" id="genderError">Please select your gender</div>
+        </div>
+
+        <div class="form-group">
+          <label for="contact" class="form-label required-field">Contact Number</label>
+          <div class="input-wrapper">
+            <i class="fas fa-phone input-icon"></i>
+            <input type="tel" class="form-control" id="contact" name="contact" pattern="[0-9]{10}" placeholder="Enter 10-digit contact number" required>
+          </div>
+          <div class="error-message" id="contactError">Please enter a valid 10-digit contact number</div>
+        </div>
+
+        <div class="form-group">
+          <label for="fingerprint" class="form-label required-field">Upload Fingerprint Image</label>
+          <div class="file-input-wrapper">
+            <input type="file" id="fingerprint" name="file" accept="image/*" required>
+            <label for="fingerprint" class="file-input-label">
+              <i class="fas fa-upload"></i> Choose File
+            </label>
+          </div>
+          <div class="error-message" id="fingerprintError">Please upload a fingerprint image</div>
+        </div>
+
+        <div class="image-preview" id="imagePreview">
+          <img src="" alt="Fingerprint Preview">
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-flask"></i> Predict Blood Group
+        </button>
+      </form>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+    </div>
+  </main>
+
+  <!-- Vendor JS Files -->
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/vendor/aos/aos.js"></script>
+  <script src="/static/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/static/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="/static/js/main.js"></script>
+
+  <script>
+    // Image preview functionality
+    document.getElementById('fingerprint').addEventListener('change', function(e) {
+      const preview = document.getElementById('imagePreview');
+      const file = e.target.files[0];
+      
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.style.display = 'block';
+          preview.querySelector('img').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+      }
+    });
+
+    // Form validation
+    document.getElementById('predictionForm').addEventListener('submit', function(e) {
+      let isValid = true;
+      
+      // Name validation
+      const name = document.getElementById('name').value;
+      if (!name.trim()) {
+        document.getElementById('nameError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('nameError').style.display = 'none';
+      }
+
+      // Age validation
+      const age = document.getElementById('age').value;
+      if (!age || age < 1 || age > 120) {
+        document.getElementById('ageError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('ageError').style.display = 'none';
+      }
+
+      // Gender validation
+      const gender = document.getElementById('gender').value;
+      if (!gender) {
+        document.getElementById('genderError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('genderError').style.display = 'none';
+      }
+
+      // Contact validation
+      const contact = document.getElementById('contact').value;
+      if (!contact.match(/^[0-9]{10}$/)) {
+        document.getElementById('contactError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('contactError').style.display = 'none';
+      }
+
+      // Fingerprint validation
+      const fingerprint = document.getElementById('fingerprint').value;
+      if (!fingerprint) {
+        document.getElementById('fingerprintError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('fingerprintError').style.display = 'none';
+      }
+
+      if (!isValid) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+
+</html> 

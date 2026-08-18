@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Blood Group Prediction Report</title>
+
+  <!-- Favicons -->
+  <link href="/static/img/favicon.png" rel="icon">
+  <link href="/static/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/static/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/static/css/main.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .report-container {
+      max-width: 800px;
+      margin: 80px auto 40px;
+      padding: 30px;
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .report-header {
+      text-align: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #eee;
+    }
+
+    .report-title {
+      color: #333;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .report-date {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .report-content {
+      margin-bottom: 15px;
+    }
+
+    .info-group {
+      margin-bottom: 10px;
+      padding: 8px;
+      background-color: #f8f9fa;
+      border-radius: 6px;
+    }
+
+    .info-label {
+      color: #666;
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
+    .info-value {
+      color: #333;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .blood-group-value {
+      color: #dc3545;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .accuracy-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background-color: #28a745;
+      color: white;
+      border-radius: 15px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .report-footer {
+      text-align: center;
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 2px solid #eee;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 6px 15px;
+      border-radius: 4px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .blood-info {
+      margin-top: 10px;
+    }
+
+    .blood-details {
+      text-align: left;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+    }
+
+    .blood-details h4 {
+      color: #dc3545;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .blood-details p {
+      margin-bottom: 6px;
+      line-height: 1.3;
+      font-size: 13px;
+    }
+
+    .blood-details strong {
+      color: #333;
+    }
+
+    @media print {
+      body {
+        background-color: white;
+        margin: 0;
+        padding: 0;
+      }
+
+      .report-container {
+        margin: 0;
+        padding: 20px;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      .header {
+        display: none;
+      }
+
+      .report-header {
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+      }
+
+      .report-title {
+        font-size: 20px;
+      }
+
+      .report-date {
+        font-size: 12px;
+      }
+
+      .info-group {
+        margin-bottom: 8px;
+        padding: 6px;
+      }
+
+      .info-label {
+        font-size: 11px;
+      }
+
+      .info-value {
+        font-size: 13px;
+      }
+
+      .blood-group-value {
+        font-size: 16px;
+      }
+
+      .accuracy-badge {
+        padding: 3px 8px;
+        font-size: 12px;
+      }
+
+      .blood-details {
+        padding: 8px;
+      }
+
+      .blood-details h4 {
+        font-size: 15px;
+        margin-bottom: 6px;
+      }
+
+      .blood-details p {
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+
+      .report-footer {
+        margin-top: 10px;
+        padding-top: 5px;
+      }
+
+      .action-buttons {
+        display: none;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="index-page">
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="/home" class="logo d-flex align-items-center me-auto">
+        <img src="/static/img/logo.png" alt="">
+        <h1 class="sitename">Bloodgroup Prediction</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/team">Team</a></li>
+          {% if 'user_id' in session %}
+          <li><a href="/predict_blood_group">Predict</a></li>
+          <li><a href="/Accurancy">Accurancy</a></li>
+          <li><a href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+          <li><a href="/logout" class="logout-link">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a></li>
+          {% else %}
+          <li><a href="/login">Login</a></li>
+          <li><a href="/signup">Sign Up</a></li>
+          {% endif %}
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="report-container">
+      <div class="report-header">
+        <div class="report-title">Blood Group Prediction Report</div>
+        <div class="report-date">Generated on: {{ now().strftime('%B %d, %Y %H:%M') }}</div>
+      </div>
+
+      <div class="report-content">
+        <div class="info-group">
+          <div class="info-label">Full Name</div>
+          <div class="info-value">{{ fullname }}</div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-label">Age</div>
+          <div class="info-value">{{ age }}</div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-label">Gender</div>
+          <div class="info-value">{{ gender }}</div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-label">Contact Number</div>
+          <div class="info-value">{{ contact }}</div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-label">Email Address</div>
+          <div class="info-value">{{ email }}</div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-label">Predicted Blood Group</div>
+          <div class="info-value blood-group-value">{{ blood_group }}</div>
+        </div>
+
+        <div class="info-group">
+          <div class="info-label">Prediction Accuracy</div>
+          <div class="info-value">
+            <span class="accuracy-badge">{{ accuracy }}%</span>
+          </div>
+        </div>
+
+        <div class="info-group blood-info">
+          <div class="info-label">Blood Group Information</div>
+          <div class="info-value">
+            {% if blood_group == 'A+' %}
+            <div class="blood-details">
+              <h4>🩸 A+ (A Positive)</h4>
+              <p><strong>Global prevalence:</strong> ~30% (very common)</p>
+              <p><strong>Interesting Fact:</strong> Can receive blood from A+, A−, O+, O−</p>
+              <p><strong>Donation Compatibility:</strong> Can donate only to A+ and AB+</p>
+              <p><strong>Fun Fact:</strong> Common in Europe and North America</p>
+            </div>
+            {% elif blood_group == 'A-' %}
+            <div class="blood-details">
+              <h4>🩸 A− (A Negative)</h4>
+              <p><strong>Global prevalence:</strong> ~6% (less common)</p>
+              <p><strong>Interesting Fact:</strong> Can receive blood from A− and O− only</p>
+              <p><strong>Donation Compatibility:</strong> Can donate to A−, A+, AB−, and AB+</p>
+              <p><strong>Rare Note:</strong> Harder to find during emergencies due to low prevalence</p>
+            </div>
+            {% elif blood_group == 'B+' %}
+            <div class="blood-details">
+              <h4>🩸 B+ (B Positive)</h4>
+              <p><strong>Global prevalence:</strong> ~8–10%</p>
+              <p><strong>Interesting Fact:</strong> Can receive from B+, B−, O+, O−</p>
+              <p><strong>Donation Compatibility:</strong> Can donate to B+ and AB+</p>
+              <p><strong>Fun Fact:</strong> More common in South Asia and Central Asia</p>
+            </div>
+            {% elif blood_group == 'B-' %}
+            <div class="blood-details">
+              <h4>🩸 B− (B Negative)</h4>
+              <p><strong>Global prevalence:</strong> ~2% (very rare)</p>
+              <p><strong>Interesting Fact:</strong> Can receive blood only from B− and O−</p>
+              <p><strong>Donation Compatibility:</strong> Can donate to B−, B+, AB−, and AB+</p>
+              <p><strong>Rare Note:</strong> Especially rare in North and South America</p>
+            </div>
+            {% elif blood_group == 'AB+' %}
+            <div class="blood-details">
+              <h4>🩸 AB+ (AB Positive)</h4>
+              <p><strong>Global prevalence:</strong> ~1% (rarest AB type)</p>
+              <p><strong>Interesting Fact:</strong> Known as the "Universal Recipient" – can receive from all blood groups</p>
+              <p><strong>Donation Compatibility:</strong> Can donate only to AB+</p>
+              <p><strong>Rare Note:</strong> Despite being rare, they're least restricted in receiving blood</p>
+            </div>
+            {% elif blood_group == 'AB-' %}
+            <div class="blood-details">
+              <h4>🩸 AB− (AB Negative)</h4>
+              <p><strong>Global prevalence:</strong> ~0.5% (RAREST of all)</p>
+              <p><strong>Interesting Fact:</strong> Can receive from AB−, A−, B−, O−</p>
+              <p><strong>Donation Compatibility:</strong> Can donate to AB− and AB+</p>
+              <p><strong>Fun Fact:</strong> Extremely valuable for plasma donation</p>
+            </div>
+            {% elif blood_group == 'O+' %}
+            <div class="blood-details">
+              <h4>🩸 O+ (O Positive)</h4>
+              <p><strong>Global prevalence:</strong> ~37% (most common overall)</p>
+              <p><strong>Interesting Fact:</strong> Can receive blood from O+ and O−</p>
+              <p><strong>Donation Compatibility:</strong> Can donate to all positive blood types (A+, B+, AB+, O+)</p>
+              <p><strong>Fun Fact:</strong> In high demand because of versatility in donation</p>
+            </div>
+            {% elif blood_group == 'O-' %}
+            <div class="blood-details">
+              <h4>🩸 O− (O Negative)</h4>
+              <p><strong>Global prevalence:</strong> ~6–7%</p>
+              <p><strong>Interesting Fact:</strong> Known as the "Universal Donor" – can donate to anyone</p>
+              <p><strong>Donation Compatibility:</strong> Universal red cell donor</p>
+              <p><strong>Rare Note:</strong> Lifesaving in trauma and neonatal emergencies</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="report-footer">
+        <div class="action-buttons">
+          <a href="#" onclick="window.print()" class="btn btn-primary">
+            <i class="bi bi-printer"></i> Print Report
+          </a>
+          <a href="{{ url_for('predict_blood_group') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Prediction
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Vendor JS Files -->
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/vendor/aos/aos.js"></script>
+  <script src="/static/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/static/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="/static/js/main.js"></script>
+</body>
+
+</html> 
